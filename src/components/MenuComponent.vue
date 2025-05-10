@@ -44,6 +44,12 @@ const menuData = ref([
     icon: IconComputer,
     path: '/analysis',
   },
+  {
+    key: 'analysis2',
+    title: '监控分析2',
+    icon: IconComputer,
+    path: '/analysis2',
+  },
 ])
 
 const selectedKeys = ref([])

@@ -56,7 +56,7 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
-import { analysis, getAllTags, queryTagByFromAddress } from '@/api/monitor.ts'
+import { analysis2, getAllTags, queryTagByFromAddress } from '@/api/monitor.ts'
 import { IconCopy, IconRefresh } from '@arco-design/web-vue/es/icon'
 import { Message } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
@@ -172,7 +172,7 @@ const doTableChange = ({ current, pageSize }) => {
 
 // 获取数据
 const fetchData = async () => {
-  const res = await analysis(searchParams)
+  const res = await analysis2(searchParams)
   // const res = mock
   if (res.data) {
     dataList.value = res.data.results ?? []
@@ -251,10 +251,10 @@ const getAllTagList = async () => {
   }
 }
 
-const queryTagList = async ()=>{
-  const res = await queryTagByFromAddress({from_address:searchParams.address})
-  if (res.data){
-    tagOptions.value = res.data.tags.map((tag)=>{
+const queryTagList = async () => {
+  const res = await queryTagByFromAddress({ from_address: searchParams.address })
+  if (res.data) {
+    tagOptions.value = res.data.tags.map((tag) => {
       return {
         label: tag.tag,
         value: tag.tag,

@@ -8,14 +8,6 @@
         a-button(shape="round" @click="fetchData") 刷新
           template(#icon)
             icon-refresh
-    //.mb-16
-    //a-form(layout="inline" :model="searchCondition" @finish="doSearch")
-    //  a-form-item(label="邮箱")
-    //    a-input(v-model:value="searchCondition.email_like" placeholder="请输入邮箱" allow-clear @pressEnter="doSearch" )
-    //  a-form-item(label="用户名" )
-    //    a-input(v-model:value="searchCondition.username_like" placeholder="请输入用户名" allow-clear @pressEnter="doSearch")
-    //  a-form-item
-    //    a-button(type="primary" html-type="submit" ) 搜索
     .mb-16
     a-table(
       :columns="columns"
@@ -25,7 +17,7 @@
     )
       template(#address="{ record }")
         a-space
-          a-link(:href="`${record.address}`" target="_blank") {{ record.address }}
+          a-link(:href="`https://bscscan.com/address/${record.address}`" target="_blank") {{ record.address }}
           a-button(
             type="text"
             size="mini"
@@ -131,26 +123,26 @@ const doDelete = (record: API.Target) => {
 
 const mock = JSON.parse(
   '{\n' +
-    '    "code": 200,\n' +
-    '    "message": "success",\n' +
-    '    "data": {\n' +
-    '        "total": 2,\n' +
-    '        "targets": [\n' +
-    '            {\n' +
-    '                "address": "0x123...abc",\n' +
-    '                "tag": "bybit1",\n' +
-    '                "min_value": "20",\n' +
-    '                "max_value": "100"\n' +
-    '            },\n' +
-    '            {\n' +
-    '                "address": "0x456...def",\n' +
-    '                "tag": "bybit2",\n' +
-    '                "min_value": "50",\n' +
-    '                "max_value": "200"\n' +
-    '            }\n' +
-    '        ]\n' +
-    '    }\n' +
-    '}',
+  '    "code": 200,\n' +
+  '    "message": "success",\n' +
+  '    "data": {\n' +
+  '        "total": 2,\n' +
+  '        "targets": [\n' +
+  '            {\n' +
+  '                "address": "0x123...abc",\n' +
+  '                "tag": "bybit1",\n' +
+  '                "min_value": "20",\n' +
+  '                "max_value": "100"\n' +
+  '            },\n' +
+  '            {\n' +
+  '                "address": "0x456...def",\n' +
+  '                "tag": "bybit2",\n' +
+  '                "min_value": "50",\n' +
+  '                "max_value": "200"\n' +
+  '            }\n' +
+  '        ]\n' +
+  '    }\n' +
+  '}',
 )
 
 // 页面加载时请求一次

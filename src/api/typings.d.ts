@@ -10,6 +10,11 @@ declare namespace API {
     results?: Array<AnalysisResult>,
   }
 
+  type TagPage = {
+    total?: number,
+    tags?: Array<Target>,
+  }
+
   type Target ={
     address?: string
     tag?: string
@@ -23,6 +28,7 @@ declare namespace API {
   }
 
   type AnalysisQuery = {
+    address?: string,
     tag?: string,
     min_block_num?: number,
     max_block_num?: number,
@@ -44,5 +50,9 @@ declare namespace API {
     IsNewAddress?: boolean;
     CreatedAt?: string;
     UpdatedAt?: string;
+  }
+
+  type QueryTag = {
+    from_address:string
   }
 }
