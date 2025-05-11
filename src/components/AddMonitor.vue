@@ -21,9 +21,9 @@
         a-form-item(label="标签" name="tag" :rules="[{ required: true, message: '请输入标签!' }]")
           a-input(v-model:value="formData.tag" placeholder="请输入标签" allow-clear)
         a-form-item(label="最小值" name="min_value" :rules="[{ required: true, message: '请输入最小值!' }]")
-          a-input-number(v-model:value="formData.min_value" placeholder="请输入最小值" min="0" allow-clear)
+          a-input-number(v-model:value="formData.min_value" placeholder="请输入最小值" :min="0" allow-clear)
         a-form-item(label="最大值" name="max_value" :rules="[{ required: true, message: '请输入最大值!' }]")
-          a-input-number(v-model:value="formData.max_value" placeholder="请输入最大值" min="0" allow-clear)
+          a-input-number(v-model:value="formData.max_value" placeholder="请输入最大值" :min="0" allow-clear)
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'

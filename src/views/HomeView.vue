@@ -89,7 +89,6 @@ const pagination = computed(() => {
     total: total.value,
     showTotal: true,
     showPageSize: true,
-    showTotal: (total: number) => `共 ${total} 条`,
   }
 })
 const doTableChange = ({ current, pageSize }) => {

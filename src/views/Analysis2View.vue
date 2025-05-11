@@ -22,6 +22,8 @@
         a-input-number(v-model="searchParams.max_value" placeholder="请输入最大值" allow-clear)
       a-form-item(label="是否新地址" )
         a-select(v-model="searchParams.is_new_address" placeholder="请选择" :options="[{label:'是',value:true},{label: '否',value:false}]" allow-clear)
+      a-form-item(label="轮询时间" )
+        a-select(v-model="searchTime" placeholder="轮询时间间隔" :options="searchTimeOptions")
       a-form-item
         a-button(type="primary" html-type="submit" v-if="!isVisible" ) 开始监控
         a-button(type="primary" status="danger" @click="stopPolling" v-else) 停止监控
@@ -30,8 +32,7 @@
       a-table(
         :columns="columns"
         :data="dataList"
-        :pagination="pagination"
-        @change="doTableChange"
+        :pagination="false"
         stripe
         style="min-width: 1400px;"
       )
@@ -55,13 +56,13 @@
           span {{ formatValue(record.Value) }}
 </template>
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, shallowRef } from 'vue'
 import { analysis2, getAllTags, queryTagByFromAddress } from '@/api/monitor.ts'
 import { IconCopy, IconRefresh } from '@arco-design/web-vue/es/icon'
 import { Message } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
 
-const columns = ref([
+const columns = shallowRef([
   {
     title: 'ID',
     dataIndex: 'ID',
@@ -121,6 +122,7 @@ const columns = ref([
   //   key: 'action',
   // },
 ])
+const searchTime = ref(5000)
 
 // 数据
 const dataList = ref<API.AnalysisResult[]>([])
@@ -139,7 +141,7 @@ onUnmounted(() => {
 const startPolling = () => {
   if (timer.value) return
   fetchData()
-  timer.value = setInterval(fetchData, 5000)
+  timer.value = setInterval(fetchData, searchTime.value)
   isVisible.value = true
 }
 const stopPolling = () => {
@@ -155,25 +157,10 @@ const searchParams = reactive<API.AnalysisQuery>({
   order_by: 'block_number',
   order: 'desc',
 })
-const pagination = computed(() => {
-  return {
-    current: 1,
-    pageSize: 10,
-    total: total.value,
-    showTotal: true,
-    showPageSize: true,
-    showTotal: (total: number) => `共 ${total} 条`,
-  }
-})
-const doTableChange = ({ current, pageSize }) => {
-  searchParams.limit = pageSize
-  fetchData()
-}
 
 // 获取数据
 const fetchData = async () => {
   const res = await analysis2(searchParams)
-  // const res = mock
   if (res.data) {
     dataList.value = res.data.results ?? []
     total.value = res.data.total ?? 0
@@ -181,42 +168,6 @@ const fetchData = async () => {
     Message.error('获取数据失败，' + res.message)
   }
 }
-
-const mock = JSON.parse(
-  '{\n' +
-    '    "code": 200,\n' +
-    '    "message": "success",\n' +
-    '    "data": {\n' +
-    '        "total": 2,\n' +
-    '        "results": [\n' +
-    '            {\n' +
-    '                "ID": 1,\n' +
-    '                "Address": "0x123...abc",\n' +
-    '                "Tag": "bybit1",\n' +
-    '                "TxHash": "0x789...def",\n' +
-    '                "Value": "50",\n' +
-    '                "FromAddress": "0x456...ghi",\n' +
-    '                "BlockNumber": 49186142,\n' +
-    '                "IsNewAddress": true,\n' +
-    '                "CreatedAt": "2024-03-21T10:00:00Z",\n' +
-    '                "UpdatedAt": "2024-03-21T10:00:00Z"\n' +
-    '            },\n' +
-    '            {\n' +
-    '                "ID": 2,\n' +
-    '                "Address": "0x123...abc",\n' +
-    '                "Tag": "bybit1",\n' +
-    '                "TxHash": "0x012...jkl",\n' +
-    '                "Value": "30",\n' +
-    '                "FromAddress": "0x456...ghi",\n' +
-    '                "BlockNumber": 49186141,\n' +
-    '                "IsNewAddress": true,\n' +
-    '                "CreatedAt": "2024-03-21T09:59:00Z",\n' +
-    '                "UpdatedAt": "2024-03-21T09:59:00Z"\n' +
-    '            }\n' +
-    '        ]\n' +
-    '    }\n' +
-    '}',
-)
 
 // 页面加载时请求一次
 onMounted(() => {
@@ -282,6 +233,13 @@ const formatValue = (val: string | number) => {
   if (isNaN(num)) return val
   return num.toFixed(5)
 }
+
+const searchTimeOptions = [
+  {label: '5秒', value: 5000},
+  {label: '10秒', value: 10000},
+  {label: '15秒', value: 15000},
+  {label: '20秒', value: 20000},
+]
 </script>
 
 <style scoped lang="scss">

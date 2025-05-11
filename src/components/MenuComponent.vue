@@ -15,7 +15,7 @@
         a-menu-item(v-for="child in item.children" :key="child.key") {{child.title}}
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { IconComputer, IconDashboard } from '@arco-design/web-vue/es/icon'
 
@@ -25,7 +25,7 @@ const props = defineProps({
 
 const router = useRouter()
 
-const menuData = ref([
+const menuData = shallowRef([
   // {
   //   key: 'dashboard',
   //   title: '仪表盘',
